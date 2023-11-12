@@ -2,29 +2,54 @@ package ua.lviv.lgs.management.domain;
 
 import java.util.List;
 
-import javax.security.auth.Subject;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
+@Entity
+@Table(name = "statement")
 public class Statement {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	private Integer userId;
-	List<Subject> subject;
-	List<Integer> marks;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "faculty_id", referencedColumnName = "id")
+	private Faculty faculty;
+
+	@ElementCollection
+	private List<Double> marks;
+
+	@Transient
+	private String userEmail;
+
+	@Transient
+	private Integer facultyId;
 
 	public Statement() {
-
 	}
 
-	public Statement(Integer userId, List<Subject> subject, List<Integer> marks) {
-		this.userId = userId;
-		this.subject = subject;
+	public Statement(User user, Faculty faculty, List<Double> marks) {
+		this.user = user;
+		this.faculty = faculty;
 		this.marks = marks;
 	}
 
-	public Statement(Integer id, Integer userId, List<Subject> subject, List<Integer> marks) {
+	public Statement(Integer id, User user, Faculty faculty, List<Double> marks) {
 		this.id = id;
-		this.userId = userId;
-		this.subject = subject;
+		this.user = user;
+		this.faculty = faculty;
 		this.marks = marks;
 	}
 
@@ -36,38 +61,54 @@ public class Statement {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public List<Subject> getSubject() {
-		return subject;
+	public Faculty getFaculty() {
+		return faculty;
 	}
 
-	public void setSubject(List<Subject> subject) {
-		this.subject = subject;
+	public void setFaculty(Faculty faculty) {
+		this.faculty = faculty;
 	}
 
-	public List<Integer> getMarks() {
+	public List<Double> getMarks() {
 		return marks;
 	}
 
-	public void setMarks(List<Integer> marks) {
+	public void setMarks(List<Double> marks) {
 		this.marks = marks;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public Integer getFacultyId() {
+		return facultyId;
+	}
+
+	public void setFacultyId(Integer facultyId) {
+		this.facultyId = facultyId;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((faculty == null) ? 0 : faculty.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((marks == null) ? 0 : marks.hashCode());
-		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -80,6 +121,11 @@ public class Statement {
 		if (getClass() != obj.getClass())
 			return false;
 		Statement other = (Statement) obj;
+		if (faculty == null) {
+			if (other.faculty != null)
+				return false;
+		} else if (!faculty.equals(other.faculty))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -90,22 +136,18 @@ public class Statement {
 				return false;
 		} else if (!marks.equals(other.marks))
 			return false;
-		if (subject == null) {
-			if (other.subject != null)
+		if (user == null) {
+			if (other.user != null)
 				return false;
-		} else if (!subject.equals(other.subject))
-			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Statement [id=" + id + ", userId=" + userId + ", subject=" + subject + ", marks=" + marks + "]";
+		return "Statement [id=" + id + ", user=" + user + ", faculty=" + faculty + ", marks=" + marks + "]";
 	}
 
+	
 }
