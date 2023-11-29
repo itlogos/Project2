@@ -1,5 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -9,7 +10,8 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -20,6 +22,8 @@
 	integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="../css/home.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- Font Awesome JS -->
 <script defer
@@ -57,8 +61,8 @@
 
 		<ul class="list-unstyled components">
 			<p>${pageContext.request.userPrincipal.name}</p>
-			<li class="active"><a href="/home">Home</a></li>
-			<li><a href="/create-faculty">Create faculty</a></li>
+			<li><a href="/home">Home</a></li>
+			<li class="active"><a href="/create-faculty">Create faculty</a></li>
 			<li><a href="/rating">Rating</a></li>
 		</ul>
 	</nav>
@@ -101,47 +105,38 @@
 		</nav>
 
 		<!-- Page Content  -->
+		<form:form method="POST" action="${contextPath}/addFaculty"
+					modelAttribute="faculty">
+					<table>
+						<tr>
+							<td><form:label path="name">New faculty name: </form:label></td>
+							<td><form:input type="text" path="name" /></td>
+						</tr>
 
-		<div class="container">
-			<div class="row">
-				<!-- Page Content -->
-				<c:if test="${not empty faculties}">
-					<c:forEach items="${faculties}" var="currentFaculty">
-						<div class="col-6 col-md-4">
-							<div class="card">
+						<tr>
+							<td><form:label path="students">Quantity of students: </form:label></td>
+							<td><form:input path="students" /></td>
+						</tr>
 
-								<!-- Card image -->
-								<div class="view view-cascade overlay">
-									<img class="card-img-top" src="../img/faculty-logo.jpg"
-										alt="Card image cap">
-								</div>
-
-								<!-- Card content -->
-								<div class="card-body">
-
-									<!-- Title -->
-									<h4 class="card-title">${currentFaculty.name}</h4>
-									<!-- Text -->
-									<p class="card-text">Quantity of student:
-										${currentFaculty.students}</p>
-									<p class="card-text">
-										List of subjects:<br>
-									</p>
-									<c:forEach items="${currentFaculty.subjects}"
-										var="currentSubject">
-										<p class="card-text">${currentSubject}</p>
+						<tr>
+							<td>Choose subjects: <br><c:if test="${not empty subjects}">
+									<c:forEach items="${subjects}" var="currentSubject">
+										<form:checkbox path="subjects" value="${currentSubject}" />${currentSubject}<br>
 									</c:forEach>
-									<!-- Button -->
-									<a
-										href="entrantRegistration?currentFacultyId=${currentFaculty.id}&currentUserEmail=${pageContext.request.userPrincipal.name}"
-										class="btn btn-primary">Choose this faculty</a>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:if>
-			</div>
-		</div>
+								</c:if>
+							</td>
+						</tr>
+
+						<tr>
+							<td><input type="submit" value="Submit" /></td>
+						</tr>
+					</table>
+
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</form:form>
+
+
 	</div>
 </div>
 <script type="text/javascript" src="../js/home.js"></script>

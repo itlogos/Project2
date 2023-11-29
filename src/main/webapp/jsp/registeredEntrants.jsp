@@ -1,5 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -13,7 +14,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Homepage</title>
+<title>Registered Entrants</title>
 
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
@@ -57,9 +58,9 @@
 
 		<ul class="list-unstyled components">
 			<p>${pageContext.request.userPrincipal.name}</p>
-			<li class="active"><a href="/home">Home</a></li>
+			<li><a href="/home">Home</a></li>
 			<li><a href="/create-faculty">Create faculty</a></li>
-			<li><a href="/rating">Rating</a></li>
+			<li class="active"><a href="/registeredEntrants">Registered Entrants</a></li>
 		</ul>
 	</nav>
 
@@ -99,52 +100,51 @@
 				</div>
 			</div>
 		</nav>
-
-		<!-- Page Content  -->
-
-		<div class="container">
-			<div class="row">
-				<!-- Page Content -->
-				<c:if test="${not empty faculties}">
-					<c:forEach items="${faculties}" var="currentFaculty">
-						<div class="col-6 col-md-4">
-							<div class="card">
-
-								<!-- Card image -->
-								<div class="view view-cascade overlay">
-									<img class="card-img-top" src="../img/faculty-logo.jpg"
-										alt="Card image cap">
-								</div>
-
-								<!-- Card content -->
-								<div class="card-body">
-
-									<!-- Title -->
-									<h4 class="card-title">${currentFaculty.name}</h4>
-									<!-- Text -->
-									<p class="card-text">Quantity of student:
-										${currentFaculty.students}</p>
-									<p class="card-text">
-										List of subjects:<br>
-									</p>
-									<c:forEach items="${currentFaculty.subjects}"
-										var="currentSubject">
-										<p class="card-text">${currentSubject}</p>
-									</c:forEach>
-									<!-- Button -->
-									<a
-										href="entrantRegistration?currentFacultyId=${currentFaculty.id}&currentUserEmail=${pageContext.request.userPrincipal.name}"
-										class="btn btn-primary">Choose this faculty</a>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:if>
-			</div>
-		</div>
+		
+		<c:if test="${not empty registeredEntrants}">
+			<table style="width: 100%; border: 2px solid black;"">
+				<tr>
+					<th>Photo</th>
+					<th>First name</th>
+					<th>Last name</th>
+					<th>Email</th>
+					<th>Faculty name</th>
+					<th colspan="4">Marks</th>
+					<th>Action</th>
+				</tr>
+				<c:forEach items="${registeredEntrants}" var="currentRegisteredEntrant">
+					<tr>
+						<td rowspan="2"><img src="data:image/png;base64,${currentRegisteredEntrant.encodedEntrantImage}" width="70" height="70" /></td>
+						<td rowspan="2">${currentRegisteredEntrant.user.firstName}</td>
+						<td rowspan="2">${currentRegisteredEntrant.user.lastName}</td>
+						<td rowspan="2">${currentRegisteredEntrant.user.email}</td>
+						<td rowspan="2">${currentRegisteredEntrant.faculty.name}</td>
+						
+						<c:forEach items="${currentRegisteredEntrant.faculty.subjects}" var="currentSubject">
+							<td>${currentSubject}</td>
+						</c:forEach>
+						
+						<td rowspan="2">
+							<form:form method="POST" action="${contextPath}/entrantSubmiting">						
+								<input type="hidden" name="facultyId" value="${currentRegisteredEntrant.faculty.id}" />
+								<input type="hidden" name="userId" value="${currentRegisteredEntrant.user.id}" />
+								<input type="hidden" name="entrantId" value="${currentRegisteredEntrant.id}" />
+								<button type="submit">Submit</button>
+							</form:form>
+						</td>
+					</tr>
+					
+					<tr>
+						<c:forEach items="${currentRegisteredEntrant.marks}" var="currentMark">
+							<td>${currentMark}</td>
+						</c:forEach>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
 	</div>
+	
 </div>
 <script type="text/javascript" src="../js/home.js"></script>
 </body>
-
 </html>

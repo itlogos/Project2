@@ -1,5 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -9,7 +11,8 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -20,8 +23,9 @@
 	integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="../css/home.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- Font Awesome JS -->
 <script defer
 	src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
 	integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
@@ -57,13 +61,14 @@
 
 		<ul class="list-unstyled components">
 			<p>${pageContext.request.userPrincipal.name}</p>
-			<li class="active"><a href="/home">Home</a></li>
-			<li><a href="/create-faculty">Create faculty</a></li>
-			<li><a href="/rating">Rating</a></li>
+			<li><a href="/home">Home</a></li>
+			<security:authorize access="hasRole('ADMIN')">
+			<li class="active"><a href="/create-faculty">Create faculty</a></li>
+			<li><a href="/registeredEntrants">Registered Entrants</a></li>
+			</security:authorize>
 		</ul>
 	</nav>
 
-	<!-- Header Content  -->
 	<div id="content">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -100,48 +105,43 @@
 			</div>
 		</nav>
 
-		<!-- Page Content  -->
+		<c:forEach var="element" items="${List1}" varStatus="status">
+			<p>${element}${List2[status.index]}
+		</c:forEach>
 
-		<div class="container">
-			<div class="row">
-				<!-- Page Content -->
-				<c:if test="${not empty faculties}">
-					<c:forEach items="${faculties}" var="currentFaculty">
-						<div class="col-6 col-md-4">
-							<div class="card">
+		<h2>Rating of faculty with name ${faculty.name}</h2>
 
-								<!-- Card image -->
-								<div class="view view-cascade overlay">
-									<img class="card-img-top" src="../img/faculty-logo.jpg"
-										alt="Card image cap">
-								</div>
+		<c:if test="${not empty statements}">
 
-								<!-- Card content -->
-								<div class="card-body">
+			<table style="width: 75%">
+				<tr>
+					<th>First name</th>
+					<th>Second name</th>
+					<th colspan="4">Marks</th>
+					<th>Is Accepted?</th>
+				</tr>
+				<c:forEach items="${statements}" var="currentStatement"
+					varStatus="status">
+					<tr>
+						<td rowspan="2">${users[status.index].firstName}</td>
+						<td rowspan="2">${users[status.index].lastName}</td>
 
-									<!-- Title -->
-									<h4 class="card-title">${currentFaculty.name}</h4>
-									<!-- Text -->
-									<p class="card-text">Quantity of student:
-										${currentFaculty.students}</p>
-									<p class="card-text">
-										List of subjects:<br>
-									</p>
-									<c:forEach items="${currentFaculty.subjects}"
-										var="currentSubject">
-										<p class="card-text">${currentSubject}</p>
-									</c:forEach>
-									<!-- Button -->
-									<a
-										href="entrantRegistration?currentFacultyId=${currentFaculty.id}&currentUserEmail=${pageContext.request.userPrincipal.name}"
-										class="btn btn-primary">Choose this faculty</a>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:if>
-			</div>
-		</div>
+						<c:forEach items="${faculty.subjects}" var="currentSubject">
+							<td>${currentSubject}</td>
+						</c:forEach>
+
+						<td rowspan="2">${accepting[status.index]}</td>
+					</tr>
+					<tr>
+						<c:forEach items="${currentStatement.statementMarks}"
+							var="currentStatementMark">
+							<td>${currentStatementMark}</td>
+						</c:forEach>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
+
 	</div>
 </div>
 <script type="text/javascript" src="../js/home.js"></script>
