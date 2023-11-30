@@ -1,5 +1,7 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -49,7 +51,7 @@
 
 </head>
 <div class="wrapper">
-	<!-- Sidebar  -->
+	
 	<nav id="sidebar">
 		<div class="sidebar-header">
 			<h3>University</h3>
@@ -58,12 +60,13 @@
 		<ul class="list-unstyled components">
 			<p>${pageContext.request.userPrincipal.name}</p>
 			<li class="active"><a href="/home">Home</a></li>
+			<security:authorize access="hasRole('ADMIN')">
 			<li><a href="/create-faculty">Create faculty</a></li>
-			<li><a href="/rating">Rating</a></li>
+			<li><a href="/registeredEntrants">Registered Entrants</a></li>
+			</security:authorize>
 		</ul>
 	</nav>
 
-	<!-- Header Content  -->
 	<div id="content">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -99,18 +102,17 @@
 				</div>
 			</div>
 		</nav>
-
-		<!-- Page Content  -->
+		
 
 		<div class="container">
 			<div class="row">
-				<!-- Page Content -->
+				
 				<c:if test="${not empty faculties}">
 					<c:forEach items="${faculties}" var="currentFaculty">
 						<div class="col-6 col-md-4">
 							<div class="card">
 
-								<!-- Card image -->
+							
 								<div class="view view-cascade overlay">
 									<img class="card-img-top" src="../img/faculty-logo.jpg"
 										alt="Card image cap">
@@ -132,9 +134,19 @@
 										<p class="card-text">${currentSubject}</p>
 									</c:forEach>
 									<!-- Button -->
+									<security:authorize access="hasRole('USER')">
 									<a
 										href="entrantRegistration?currentFacultyId=${currentFaculty.id}&currentUserEmail=${pageContext.request.userPrincipal.name}"
 										class="btn btn-primary">Choose this faculty</a>
+									<a
+										href="rating?currentFacultyId=${currentFaculty.id}""
+										class="btn btn-primary">Show rating</a>	
+										</security:authorize>
+										<security:authorize access="hasRole('ADMIN')">
+									<a
+										href="#"
+										class="btn btn-primary">Delete this faculty</a>
+									</security:authorize>
 								</div>
 							</div>
 						</div>
