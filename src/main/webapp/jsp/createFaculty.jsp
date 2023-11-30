@@ -15,7 +15,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Homepage</title>
+<title>Faculty</title>
 
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
@@ -52,6 +52,7 @@
 	crossorigin="anonymous"></script>
 
 </head>
+<body>
 <div class="wrapper">
 	<!-- Sidebar  -->
 	<nav id="sidebar">
@@ -63,11 +64,10 @@
 			<p>${pageContext.request.userPrincipal.name}</p>
 			<li><a href="/home">Home</a></li>
 			<li class="active"><a href="/create-faculty">Create faculty</a></li>
-			<li><a href="/rating">Rating</a></li>
+			<li><a href="/registeredEntrants">Registered Entrants</a></li>
 		</ul>
 	</nav>
 
-	<!-- Header Content  -->
 	<div id="content">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -104,7 +104,6 @@
 			</div>
 		</nav>
 
-		<!-- Page Content  -->
 		<form:form method="POST" action="${contextPath}/addFaculty"
 					modelAttribute="faculty">
 					<table>

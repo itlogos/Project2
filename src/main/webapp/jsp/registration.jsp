@@ -31,7 +31,7 @@
 		<!-- Main Form -->
 		<div class="login-form-1">
 			<form:form method="POST" modelAttribute="userForm" id="register-form"
-				class="text-left">
+				class="text-left" enctype="multipart/form-data">
 				<div class="login-form-main-message"></div>
 				<div class="main-login-form">
 					<div class="login-group">
