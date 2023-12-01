@@ -164,3 +164,14 @@ a.article:hover {
 .row > div[class*='col-'] {
   display: flex;
 }
+
+.locales {
+	float: right;
+}
+.locales_sel {
+	width: 100px;
+	height: 25px;
+	border-radius: 5px;
+    font-size: 13px;
+    font-family: Tahoma;
+}
