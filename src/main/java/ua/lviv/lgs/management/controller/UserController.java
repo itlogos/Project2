@@ -60,7 +60,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/create-faculty", method = RequestMethod.GET)
+    @RequestMapping(value = "/createFaculty", method = RequestMethod.GET)
     public ModelAndView createFaculty() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("createFaculty");

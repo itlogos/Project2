@@ -17,14 +17,6 @@ import javax.persistence.Table;
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		private Integer id;
 
-		public List<Subjects> getSubjects() {
-			return subjects;
-		}
-
-		public void setSubjects(List<Subjects> subjects) {
-			this.subjects = subjects;
-		}
-
 		@Column
 		private String name;
 
@@ -75,11 +67,10 @@ import javax.persistence.Table;
 			this.students = students;
 		}
 
-		public List<Subjects> getSubjecst() {
+		public List<Subjects> getSubjects() {
 			return subjects;
 		}
-
-		public void setSubject(List<Subjects> subjects) {
+		public void setSubjects(List<Subjects> subjects) {
 			this.subjects = subjects;
 		}
 

@@ -37,4 +37,9 @@ public class RegisteredEntrantService {
 		logger.info("Delete registered entrant by id - " + id);
 		registeredEntrantRepository.deleteById(id);
 	}
+	
+	public void deleteAll() {
+		logger.info("Delete all registered");
+		registeredEntrantRepository.deleteAll();
+	}
 }
